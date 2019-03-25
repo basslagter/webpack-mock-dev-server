@@ -3,33 +3,51 @@ import path from 'path';
 import { Application, Request, Response } from 'express';
 import { IFixtureConfig, IRule } from './contracts';
 
+const DEFAULT_METHOD = 'GET';
+
 export function MockDevServer(configPath: string = './mock-dev-server.config') {
   const fixtureConfig: IFixtureConfig = require(configPath);
 
   return function DevServerBefore(app: Application) {
-    app.get(fixtureConfig.entry || '*', function (req: Request, res: Response) {
-      const rule = getRule(req.originalUrl);
+    app.all(fixtureConfig.entry || '*', function (req: Request, res: Response) {
+      const { method, originalUrl } = req;
+      const rule = getRule(req);
 
       if (rule) {
         setResponseHeaders(res, rule);
         setResponseBody(res, rule);
       } else {
-        console.warn('No fixture found for \'' + req.originalUrl + '\'');
+        console.warn(`No rule found for ${method} '${originalUrl}'`);
       }
     });
   };
 
-  function getRule(url: string): IRule | null {
+  function getRule(req: Request): IRule | null {
+    const { method, originalUrl } = req;
     const rules = fixtureConfig.rules;
 
     if (rules) {
       for (let i = 0, y = rules.length; i < y; i++) {
         const rule = rules[i];
 
-        if (minimatch(url, rule.test)) {
+        if (isMatch(rule)) {
           return rule;
         }
       }
+    }
+
+    function isMatch(rule: IRule) {
+      return (isMethodMatch(rule) && isTestMatch(rule));
+    }
+
+    function isMethodMatch(rule: IRule) {
+      const ruleMethod = rule.method || DEFAULT_METHOD;
+
+      return (ruleMethod === method);
+    }
+
+    function isTestMatch(rule: IRule) {
+      return minimatch(originalUrl, rule.test);
     }
 
     return null;

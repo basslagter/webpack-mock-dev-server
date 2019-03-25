@@ -100,6 +100,7 @@ module.exports = {
     entry: '/api/*',
     rules: [
         {
+            method: 'GET',
             test: '**/news',
             filename: 'news.json',
             headers: {
@@ -117,6 +118,7 @@ So the filename specified in the rules is relative to this path.
 2. entry: the base path to use when targeting requests in the dev-server.
 So each test in the rules is relative to this path.
 3. rules: The set of rules to check when a requests occurs.
-4. test: the glob expression to match against
-5. filename: the name of the file to return it's content from when the test succeeds.
-6. headers: any headers that need to be set them mocking the response.
+4. method (optional, default: GET): the method of the request 
+5. test: the glob expression to match against
+6. filename: the name of the file to return it's content from when the test succeeds.
+7. headers (optional): any headers that need to be set them mocking the response.
