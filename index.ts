@@ -1,6 +1,6 @@
 import minimatch from 'minimatch';
 import path from 'path';
-import { Application, Request, Response } from 'express';
+import { Application, NextFunction, Request, Response } from 'express';
 import { IFixtureConfig, IRule } from './contracts';
 
 const DEFAULT_METHOD = 'GET';
@@ -9,7 +9,7 @@ export function MockDevServer(configPath: string = './mock-dev-server.config') {
   const fixtureConfig: IFixtureConfig = require(configPath);
 
   return function DevServerBefore(app: Application) {
-    app.all(fixtureConfig.entry || '*', function (req: Request, res: Response) {
+    app.all(fixtureConfig.entry || '*', function (req: Request, res: Response, next: NextFunction) {
       const { method, originalUrl } = req;
       const rule = getRule(req);
 
@@ -18,6 +18,7 @@ export function MockDevServer(configPath: string = './mock-dev-server.config') {
         setResponseBody(res, rule);
       } else {
         console.warn(`No rule found for ${method} '${originalUrl}'`);
+        next();
       }
     });
   };
