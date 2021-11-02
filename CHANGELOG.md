@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/basslagter/webpack-mock-dev-server/compare/v1.3.4...v2.0.1) (2021-11-02)
+
 ### [1.3.4](https://github.com/basslagter/webpack-mock-dev-server/compare/v1.3.3...v1.3.4) (2019-12-11)
 
 ### [1.3.3](https://github.com/basslagter/webpack-mock-dev-server/compare/v1.3.2...v1.3.3) (2019-07-11)

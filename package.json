@@ -1,6 +1,6 @@
 {
   "name": "webpack-mock-dev-server",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Mocks webpack dev server request in an easy configurable way",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
