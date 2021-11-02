@@ -5,11 +5,15 @@ import { IFixtureConfig, IRule } from './contracts';
 
 const DEFAULT_METHOD = 'GET';
 
+interface DevServer {
+  app: Application
+}
+
 export function MockDevServer(configPath: string = './mock-dev-server.config') {
   const fixtureConfig: IFixtureConfig = require(configPath);
 
-  return function DevServerBefore(app: Application) {
-    app.all(fixtureConfig.entry || '*', function (req: Request, res: Response, next: NextFunction) {
+  return function DevServerBefore(devServer: DevServer) {
+    devServer.app.all(fixtureConfig.entry || '*', function (req: Request, res: Response, next: NextFunction) {
       const { method, originalUrl } = req;
       const rule = getRule(req);
 
